@@ -2,6 +2,7 @@ package com.hanbit.joonbum.lee.core.service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -14,12 +15,15 @@ public class ScheduleService {
 		String user = "hanbit";
 		String password = "hanbit";
 
+//		String sql = "INSERT INTO SCHEDULE (SCHEDULE_ID, TITLE, MEMO, START_DT, END_DT) "
+//				+ " VALUES('" + schedule.getScheduleId() + "', "
+//				+ "'" + schedule.getTitle() + "', "
+//				+ "'" + schedule.getMemo() + "', "
+//				+ "'" + schedule.getStartDt() + "', "
+//				+ "'" + schedule.getEndDt() + "')";
+
 		String sql = "INSERT INTO SCHEDULE (SCHEDULE_ID, TITLE, MEMO, START_DT, END_DT) "
-				+ " VALUES('" + schedule.getScheduleId() + "', "
-				+ "'" + schedule.getTitle() + "', "
-				+ "'" + schedule.getMemo() + "', "
-				+ "'" + schedule.getStartDt() + "', "
-				+ "'" + schedule.getEndDt() + "')";
+				+ " VALUES(?, ?, ?, ?, ?)";
 
 		int result = 0;
 
@@ -27,8 +31,15 @@ public class ScheduleService {
 			Class.forName("oracle.jdbc.OracleDriver");
 			Connection connection = DriverManager.getConnection(url, user, password);
 
-			Statement statement = connection.createStatement();
-			result = statement.executeUpdate(sql);
+//			Statement statement = connection.createStatement();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, schedule.getScheduleId());
+			statement.setString(2, schedule.getTitle());
+			statement.setString(3, schedule.getMemo());
+			statement.setString(4, schedule.getStartDt());
+			statement.setString(5, schedule.getEndDt());
+
+			result = statement.executeUpdate();
 
 			connection.close();
 
