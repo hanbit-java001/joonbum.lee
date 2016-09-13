@@ -11,18 +11,20 @@ import com.hanbit.joonbum.lee.core.dao.ScheduleDAO;
 import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
 
 public class ScheduleService {
+
+	ScheduleDAO scheduleDAO = new ScheduleDAO();
+
 	public int addSchedule(ScheduleVo schedule){
-		ScheduleDAO scheduleDAO = new ScheduleDAO();
 
 		return scheduleDAO.insertSchedule(schedule);
 	}
 	public int modifySchedule(ScheduleVo schedule){
 
-		return 0;
+		return scheduleDAO.updateSchedule(schedule);
 	}
-	public int removeSchedule(String Scheduleid){
+	public int removeSchedule(String scheduleId){
 
-		return 0;
+		return scheduleDAO.deleteSchedule(scheduleId);
 	}
 	public List<ScheduleVo> listSchdules(String StarDt, String endDt){
 
