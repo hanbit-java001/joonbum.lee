@@ -18,17 +18,24 @@ public class ScheduleService {
 
 		return scheduleDAO.insertSchedule(schedule);
 	}
+
 	public int modifySchedule(ScheduleVo schedule){
 
 		return scheduleDAO.updateSchedule(schedule);
 	}
+
 	public int removeSchedule(String scheduleId){
 
 		return scheduleDAO.deleteSchedule(scheduleId);
 	}
-	public List<ScheduleVo> listSchdules(String StarDt, String endDt){
 
-		return null;
+	public List<ScheduleVo> listSchdules(String starDt, String endDt){
+
+		return scheduleDAO.selectSchedules(starDt, endDt);
+	}
+
+	public ScheduleVo getSchedule(String scheduleId){
+		return scheduleDAO.selectSchedule(scheduleId);
 	}
 
 }
