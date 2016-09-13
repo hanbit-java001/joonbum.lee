@@ -1,11 +1,11 @@
 package com.hanbit.joonbum.lee.application;
 
-import com.hanbit.joonbum.lee.core.service.ScheduleService;
+import com.hanbit.joonbum.lee.core.service.SchedulerService;
 import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
 
 public class SimpleApplication {
 	public static void main(String[] args) {
-		ScheduleService scheduleService = new ScheduleService();
+		SchedulerService scheduleService = new SchedulerService();
 
 
 		ScheduleVo schedule = new ScheduleVo();

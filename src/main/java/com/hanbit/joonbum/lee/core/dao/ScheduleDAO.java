@@ -8,15 +8,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
 import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
 
-import oracle.net.aso.e;
-
+@Repository
 public class ScheduleDAO extends AbstractDAO{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleDAO.class);
 
 	public int insertSchedule(ScheduleVo schedule) {
+
+		LOGGER.debug("인서트 스케줄");
+
 		Connection connection = getConnection();
+
 		String sql = "INSERT INTO SCHEDULE (SCHEDULE_ID, TITLE, MEMO, START_DT, END_DT) "
 				+ " VALUES(?, ?, ?, ?, ?)";
 		List params = new ArrayList();

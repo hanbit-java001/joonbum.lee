@@ -7,15 +7,28 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.hanbit.joonbum.lee.core.dao.ScheduleDAO;
 import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
 
-public class ScheduleService {
+@Service
+public class SchedulerService {
 
-	ScheduleDAO scheduleDAO = new ScheduleDAO();
+	private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerService.class);
+
+	@Autowired
+	private ScheduleDAO scheduleDAO;
+
+	public void setScheduleDAO(ScheduleDAO scheduleDAO){
+		this.scheduleDAO=scheduleDAO;
+	}
 
 	public int addSchedule(ScheduleVo schedule){
-
+		LOGGER.debug("스케줄 추가");
 		return scheduleDAO.insertSchedule(schedule);
 	}
 
