@@ -24,10 +24,10 @@ public class SpringApplication {
 
 			ScheduleVo schedule = new ScheduleVo();
 			schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
-			schedule.setTitle("저녁");
-			schedule.setMemo("메모");
-			schedule.setStartDt("20160912");
-			schedule.setEndDt("20160913");
+			schedule.setTitle("아점");
+			schedule.setMemo("돈까스");
+			schedule.setStartDt("20160917");
+			schedule.setEndDt("20160918");
 
 			int result = schedulerService.addSchedule(schedule);
 
