@@ -21,20 +21,16 @@ public class SpringApplication {
 					new ClassPathXmlApplicationContext("spring/applicationContext-core.xml",
 							"spring/applicationContext-dao.xml");
 
-//			SchedulerService schedulerService = applicationContext.getBean(SchedulerService.class);
-//
-//			ScheduleVo schedule = new ScheduleVo();
-//			schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
-//			schedule.setTitle("아점");
-//			schedule.setMemo("돈까스");
-//			schedule.setStartDt("20160917");
-//			schedule.setEndDt("20160918");
-//
-//			int result = schedulerService.addSchedule(schedule);
-			
-			MybatisExampleDAO mybatisExampleDAO = applicationContext.getBean(MybatisExampleDAO.class);
-			
-			mybatisExampleDAO.logSysdate();
+			SchedulerService schedulerService = applicationContext.getBean(SchedulerService.class);
+
+			ScheduleVo schedule = new ScheduleVo();
+			schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
+			schedule.setTitle("점저");
+			schedule.setMemo("비빔밥");
+			schedule.setStartDt("20160919");
+			schedule.setEndDt("20160920");
+
+			int result = schedulerService.addSchedule(schedule);
 
 		} catch (Exception e) {
 			e.printStackTrace();

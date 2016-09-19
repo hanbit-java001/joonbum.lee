@@ -10,15 +10,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MybatisExampleDAO {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(MybatisExampleDAO.class);
-	
+
 	@Autowired
 	private SqlSession sqlSession;
 
 	public void logSysdate(){
-		Map result = sqlSession.selectOne("dual.selectSysdate"); // map 키와 값으로 구성되있다.
-		
+		Map result = sqlSession.selectOne("dual.selectSysdate"); // map : 키와 값으로 구성되있다.
+
 		LOGGER.debug(result.toString());
 	}
 
