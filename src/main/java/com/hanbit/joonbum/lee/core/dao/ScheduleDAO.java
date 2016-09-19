@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
+import com.hanbit.joonbum.lee.core.vo.ScheduleVO;
 
 @Repository
 public class ScheduleDAO {
@@ -25,7 +25,7 @@ public class ScheduleDAO {
 
 	@Autowired private SqlSession sqlSession;
 
-	public int insertSchedule(ScheduleVo schedule) {
+	public int insertSchedule(ScheduleVO schedule) {
 
 		LOGGER.debug("인서트 스케줄");
 
@@ -35,7 +35,7 @@ public class ScheduleDAO {
 
 	}
 
-	public int updateSchedule(ScheduleVo schedule){
+	public int updateSchedule(ScheduleVO schedule){
 
 		int result = sqlSession.update("schedule.updateSchedule", schedule);
 
@@ -48,19 +48,19 @@ public class ScheduleDAO {
 		return result;
 	}
 
-	public List<ScheduleVo> selectSchedules(String startDt, String endDt) {
+	public List<ScheduleVO> selectSchedules(String startDt, String endDt) {
 		Map params = new HashMap();
 		params.put("startDt", startDt);
 		params.put("endDt", endDt);
 
-		List<ScheduleVo> result = sqlSession.selectList("schedule.selectSchedules", params);
+		List<ScheduleVO> result = sqlSession.selectList("schedule.selectSchedules", params);
 
 		return result;
 	}
 
-	public ScheduleVo selectSchedule(String scheduleId) {
+	public ScheduleVO selectSchedule(String scheduleId) {
 
-		ScheduleVo schedule = sqlSession.selectOne("schedule.selectSchedule", scheduleId);
+		ScheduleVO schedule = sqlSession.selectOne("schedule.selectSchedule", scheduleId);
 
 		return schedule;
 	}

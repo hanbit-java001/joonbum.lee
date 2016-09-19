@@ -1,14 +1,14 @@
 package com.hanbit.joonbum.lee.application;
 
 import com.hanbit.joonbum.lee.core.service.SchedulerService;
-import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
+import com.hanbit.joonbum.lee.core.vo.ScheduleVO;
 
 public class SimpleApplication {
 	public static void main(String[] args) {
 		SchedulerService scheduleService = new SchedulerService();
 
 
-		ScheduleVo schedule = new ScheduleVo();
+		ScheduleVO schedule = new ScheduleVO();
 		schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
 		schedule.setTitle("점심");
 		schedule.setMemo("메모");

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hanbit.joonbum.lee.core.dao.ScheduleDAO;
-import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
+import com.hanbit.joonbum.lee.core.vo.ScheduleVO;
 
 @Service
 public class SchedulerService {
@@ -27,12 +27,12 @@ public class SchedulerService {
 		this.scheduleDAO=scheduleDAO;
 	}
 
-	public int addSchedule(ScheduleVo schedule){
+	public int addSchedule(ScheduleVO schedule){
 		LOGGER.debug("스케줄 추가");
 		return scheduleDAO.insertSchedule(schedule);
 	}
 
-	public int modifySchedule(ScheduleVo schedule){
+	public int modifySchedule(ScheduleVO schedule){
 
 		return scheduleDAO.updateSchedule(schedule);
 	}
@@ -42,12 +42,12 @@ public class SchedulerService {
 		return scheduleDAO.deleteSchedule(scheduleId);
 	}
 
-	public List<ScheduleVo> listSchdules(String starDt, String endDt){
+	public List<ScheduleVO> listSchdules(String starDt, String endDt){
 
 		return scheduleDAO.selectSchedules(starDt, endDt);
 	}
 
-	public ScheduleVo getSchedule(String scheduleId){
+	public ScheduleVO getSchedule(String scheduleId){
 		return scheduleDAO.selectSchedule(scheduleId);
 	}
 

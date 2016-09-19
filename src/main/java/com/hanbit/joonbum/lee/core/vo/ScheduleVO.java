@@ -1,6 +1,6 @@
 package com.hanbit.joonbum.lee.core.vo;
 
-public class ScheduleVo {
+public class ScheduleVO {
 
 	private String scheduleId;
 	private String title;

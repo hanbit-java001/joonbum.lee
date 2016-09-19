@@ -8,7 +8,7 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.hanbit.joonbum.lee.core.dao.MybatisExampleDAO;
 import com.hanbit.joonbum.lee.core.service.SchedulerService;
-import com.hanbit.joonbum.lee.core.vo.ScheduleVo;
+import com.hanbit.joonbum.lee.core.vo.ScheduleVO;
 import com.sun.org.apache.bcel.internal.util.ClassPath;
 
 public class SpringApplication {
@@ -23,7 +23,7 @@ public class SpringApplication {
 
 			SchedulerService schedulerService = applicationContext.getBean(SchedulerService.class);
 
-			ScheduleVo schedule = new ScheduleVo();
+			ScheduleVO schedule = new ScheduleVO();
 			schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
 			schedule.setTitle("점저");
 			schedule.setMemo("비빔밥");
