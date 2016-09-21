@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Log4jConfigurer;
 
-import com.hanbit.joonbum.lee.core.dao.MybatisExampleDAO;
 import com.hanbit.joonbum.lee.core.service.SchedulerService;
 import com.hanbit.joonbum.lee.core.vo.ScheduleVO;
 import com.sun.org.apache.bcel.internal.util.ClassPath;
