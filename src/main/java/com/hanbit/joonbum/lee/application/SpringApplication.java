@@ -27,8 +27,8 @@ public class SpringApplication {
 			schedule.setScheduleId(String.valueOf(System.currentTimeMillis()));
 			schedule.setTitle("점저");
 			schedule.setMemo("비빔밥");
-			schedule.setStartDt("20160919");
-			schedule.setEndDt("20160920");
+			schedule.setStartDt("201609241830");
+			schedule.setEndDt("201609251940");
 
 			int result = schedulerService.addSchedule(schedule);
 

@@ -29,7 +29,7 @@ public class ScheduleDAO {
 
 		LOGGER.debug("인서트 스케줄");
 
-		int result = sqlSession.insert("schedule.insetSchedule", schedule);
+		int result = sqlSession.insert("schedule.insertSchedule", schedule);
 
 		return result;
 

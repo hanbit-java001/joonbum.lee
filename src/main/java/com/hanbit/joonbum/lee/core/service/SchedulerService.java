@@ -42,7 +42,7 @@ public class SchedulerService {
 		return scheduleDAO.deleteSchedule(scheduleId);
 	}
 
-	public List<ScheduleVO> listSchdules(String starDt, String endDt){
+	public List<ScheduleVO> listSchedules(String starDt, String endDt){
 
 		return scheduleDAO.selectSchedules(starDt, endDt);
 	}
