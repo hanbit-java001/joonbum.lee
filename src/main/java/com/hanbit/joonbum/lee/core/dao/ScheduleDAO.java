@@ -23,7 +23,8 @@ public class ScheduleDAO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleDAO.class);
 
-	@Autowired private SqlSession sqlSession;
+	@Autowired
+	private SqlSession sqlSession;
 
 	public int insertSchedule(ScheduleVO schedule) {
 

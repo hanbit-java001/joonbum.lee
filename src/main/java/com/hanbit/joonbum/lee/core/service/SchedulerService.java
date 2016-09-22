@@ -1,12 +1,8 @@
 package com.hanbit.joonbum.lee.core.service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +19,9 @@ public class SchedulerService {
 	@Autowired
 	private ScheduleDAO scheduleDAO;
 
-	public void setScheduleDAO(ScheduleDAO scheduleDAO){
-		this.scheduleDAO=scheduleDAO;
-	}
-
 	public int addSchedule(ScheduleVO schedule){
 		LOGGER.debug("스케줄 추가");
+
 		return scheduleDAO.insertSchedule(schedule);
 	}
 
@@ -50,5 +43,16 @@ public class SchedulerService {
 	public ScheduleVO getSchedule(String scheduleId){
 		return scheduleDAO.selectSchedule(scheduleId);
 	}
+
+	public String generateId() {
+		String time = String.valueOf(System.currentTimeMillis());
+		String threadId = String.valueOf(Thread.currentThread().getId());
+		threadId = StringUtils.leftPad(threadId, 4, "0");
+
+		String uniqueId = time + threadId;
+
+		return uniqueId;
+	}
+
 
 }
