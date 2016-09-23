@@ -19,28 +19,25 @@ public class SchedulerService {
 	@Autowired
 	private ScheduleDAO scheduleDAO;
 
-	public int addSchedule(ScheduleVO schedule){
+	public int addSchedule(ScheduleVO schedule) {
 		LOGGER.debug("스케줄 추가");
 
 		return scheduleDAO.insertSchedule(schedule);
 	}
 
-	public int modifySchedule(ScheduleVO schedule){
-
+	public int modifySchedule(ScheduleVO schedule) {
 		return scheduleDAO.updateSchedule(schedule);
 	}
 
-	public int removeSchedule(String scheduleId){
-
+	public int removeSchedule(String scheduleId) {
 		return scheduleDAO.deleteSchedule(scheduleId);
 	}
 
-	public List<ScheduleVO> listSchedules(String starDt, String endDt){
-
-		return scheduleDAO.selectSchedules(starDt, endDt);
+	public List<ScheduleVO> listSchedules(String startDt, String endDt) {
+		return scheduleDAO.selectSchedules(startDt, endDt);
 	}
 
-	public ScheduleVO getSchedule(String scheduleId){
+	public ScheduleVO getSchedule(String scheduleId) {
 		return scheduleDAO.selectSchedule(scheduleId);
 	}
 
@@ -53,9 +50,10 @@ public class SchedulerService {
 
 		return uniqueId;
 	}
+
 	public int countSchedule(String startDt, String endDt) {
 		return scheduleDAO.countSchedule(startDt, endDt);
 	}
 
-
 }
+
