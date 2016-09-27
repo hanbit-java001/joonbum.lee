@@ -71,7 +71,6 @@ public class ScheduleController {
 
 		return result;
 	}
-
 	@RequestMapping(value="/api/schedule/{scheduleId}", method=RequestMethod.DELETE)
 	@ResponseBody
 	public Map removeSchedule(@PathVariable("scheduleId") String scheduleId) {
@@ -84,14 +83,10 @@ public class ScheduleController {
 
 		return result;
 	}
-
 	@RequestMapping(value="/api/schedule/{scheduleId}", method=RequestMethod.GET)
 	@ResponseBody
 	public ScheduleVO getSchedule(@PathVariable("scheduleId") String scheduleId) {
 
 		return schedulerService.getSchedule(scheduleId);
 	}
-
-
-
 }
