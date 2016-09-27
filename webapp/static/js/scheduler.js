@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	var isMobile = navigator.userAgent.indexOf("Mobile") > -1;
-	var customViews = ["add", "detail"];
+	var customViews = ["add", "detail", "modify"];
 
     var dbFormat = "YYYYMMDDHHmm";
     var viewFormat = "YYYY-MM-DD a HH:mm";
@@ -12,7 +12,11 @@ $(document).ready(function() {
     };
 
 	var currentView = "month";
-	var viewHistory = ["month"];
+	var viewHistory = [{
+		viewName: "month",
+		viewData: null
+	}];
+	var eventQueue = [];
 
 	var loadedMonths = [];
 
@@ -47,12 +51,11 @@ $(document).ready(function() {
         		removeSchedule(calEvent.id);
         	}
         	else {
-        		$.ajax({
-        			url: "/api/schedule/" + calEvent.id,
-        			method: "GET"
-        		}).done(function(result) {
-        			changeView("detail", {schedule: result});
-        		});
+        		var scheduleId = calEvent.id;
+
+            	getSchedule(scheduleId, function(schedule) {
+            		changeView("detail", {schedule: schedule});
+            	});
         	}
         }
     });
@@ -109,6 +112,23 @@ $(document).ready(function() {
     	showToday();
     });
 
+    $(".btnUpdate").on("click", function() {
+    	var scheduleId = $(this).attr("scheduleId");
+
+    	getSchedule(scheduleId, function(schedule) {
+    		changeView("modify", {schedule: schedule});
+    	});
+    });
+
+    function getSchedule(scheduleId, callback) {
+		$.ajax({
+			url: "/api/schedule/" + scheduleId,
+			method: "GET"
+		}).done(function(result) {
+			callback(result);
+		});
+    }
+
     $(".btnDelete").on("click", function() {
     	var scheduleId = $(this).attr("scheduleId");
 
@@ -133,31 +153,49 @@ $(document).ready(function() {
     	});
     }
 
-    function backwardView() {
+    function backwardView(schedule) {
     	viewHistory = viewHistory.slice(0, viewHistory.length-1);
 
-    	var viewName = viewHistory[viewHistory.length-1];
+    	var viewName = viewHistory[viewHistory.length-1].viewName;
+    	var viewData = viewHistory[viewHistory.length-1].viewData;
 
-    	changeView(viewName, null, true);
+    	if (schedule) {
+    		viewData = {
+    			schedule: schedule
+    		};
+    	}
+
+    	changeView(viewName, viewData, true);
     }
 
     function changeView(viewName, data, isBack) {
     	if (!isBack) {
-    		viewHistory.push(viewName);
+    		if (data && data.date) {
+    			data.date = moment(data.date);
+    		}
+
+    		viewHistory.push({
+    			viewName: viewName,
+    			viewData: data
+    		});
     	}
 
     	currentView = viewName;
 
     	var date;
 
-		if (data && data != null) {
+		if (data && data.date) {
 			date = data.date;
 
 			currentMoment = moment(date);
 	    	$("#calendar").fullCalendar("gotoDate", date);
 		}
 
-    	if (viewName == "add") {
+		hideAddSchedule();
+		hideDetailSchedule();
+		hideModifySchedule();
+
+		if (viewName == "add") {
     		showAddSchedule(date);
     	}
     	else if (viewName == "detail") {
@@ -165,9 +203,10 @@ $(document).ready(function() {
 
     		showDetailSchedule(schedule);
     	}
-    	else {
-    		hideAddSchedule();
-    		hideDetailSchedule();
+    	else if (viewName == "modify") {
+    		var schedule = data.schedule;
+
+    		showModifySchedule(schedule);
     	}
 
     	// 좌측 상단 메뉴 or 뒤로가기
@@ -196,14 +235,15 @@ $(document).ready(function() {
     	var defaultDate = moment(date);
 
 		$("#btnGroupCalendar").hide();
-		$("#btnGroupAddSchedule").show();
+		$("#btnGroupUpdateSchedule").show();
 
 		$("#calendar").hide();
-		$("#divAddSchedule").show();
+		$("#divUpdateSchedule").show();
 
 		defaultDate.set("hour", moment().get("hour"));
 		defaultDate.set("minute", moment().get("minute"));
 
+		$("#txtScheduleId").val("");
 		$("#txtTitle").val("");
 		$("#txtStartDt").data("DateTimePicker").date(defaultDate.subtract(0, "minutes"));
 		$("#txtEndDt").data("DateTimePicker").date(defaultDate.add(1, "hours"));
@@ -228,7 +268,25 @@ $(document).ready(function() {
     	$("#detailStartDt").html(event.start);
     	$("#detailEndDt").html(event.end);
     	$("#detailMemo").html(event.memo);
+    	$(".btnUpdate").attr("scheduleId", event.id);
     	$(".btnDelete").attr("scheduleId", event.id);
+    }
+
+    function showModifySchedule(schedule) {
+    	$("#btnGroupCalendar").hide();
+    	$("#btnGroupUpdateSchedule").show();
+
+		$("#calendar").hide();
+		$("#divUpdateSchedule").show();
+
+		var startDt = moment(schedule.startDt, dbFormat);
+		var endDt = moment(schedule.endDt, dbFormat);
+
+		$("#txtScheduleId").val(schedule.scheduleId);
+		$("#txtTitle").val(schedule.title);
+		$("#txtStartDt").data("DateTimePicker").date(startDt);
+		$("#txtEndDt").data("DateTimePicker").date(endDt);
+		$("#txtMemo").val(schedule.memo);
     }
 
     function newLineToBr(str) {
@@ -241,23 +299,45 @@ $(document).ready(function() {
     	return str;
     }
 
+    function showFullCalendar() {
+    	$("#calendar").show();
+
+    	for (var i=0;i<eventQueue.length;i++) {
+    		var event = eventQueue[i];
+
+    		$("#calendar").fullCalendar("removeEvents", event.id);
+    		$("#calendar").fullCalendar("renderEvent", event, true);
+    	}
+
+    	eventQueue = [];
+    }
+
     function hideAddSchedule() {
-		$("#btnGroupAddSchedule").hide();
+		$("#btnGroupUpdateSchedule").hide();
 		$("#btnGroupCalendar").show();
 
-		$("#divAddSchedule").hide();
-		$("#calendar").show();
+		$("#divUpdateSchedule").hide();
+		showFullCalendar();
     }
 
     function hideDetailSchedule() {
+		$("#btnGroupUpdateSchedule").hide();
 		$("#btnGroupCalendar").show();
 
 		$("#divDetailSchedule").hide();
-		$("#calendar").show();
+		showFullCalendar();
     }
 
-    function addSchedule() {
-		var title = $("#txtTitle").val();
+    function hideModifySchedule() {
+		$("#btnGroupCalendar").show();
+
+		$("#divUpdateSchedule").hide();
+		showFullCalendar();
+    }
+
+    function applySchedule() {
+		var scheduleId = $("#txtScheduleId").val();
+    	var title = $("#txtTitle").val();
 		var startDt = $("#txtStartDt").val();
 		var endDt = $("#txtEndDt").val();
 		var memo = $("#txtMemo").val();
@@ -296,25 +376,35 @@ $(document).ready(function() {
 			memo: memo
 		};
 
+    	var url;
+
+    	if (currentView == "add") {
+    		url = "/api/schedule/add";
+    	}
+    	else {
+    		schedule.scheduleId = scheduleId;
+
+    		url = "/api/schedule/modify";
+    	}
+
 		$.ajax({
-			url: "/api/schedule/add",
+			url: url,
 			method: "POST",
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			data: JSON.stringify(schedule)
 		}).done(function(result) {
-			$("#btnGroupAddSchedule").hide();
-			$("#btnGroupCalendar").show();
+			var viewName = currentView;
 
-			backwardView();
+			backwardView(result);
 
-			addScheduleToCalendar(result);
+			applyScheduleToCalendar(result, viewName);
 		}).fail(function() {
 			alert("사용자가 폭주하여 잠시 후 사용해주세요.");
 		});
     }
 
-    function addScheduleToCalendar(originEvent) {
+    function applyScheduleToCalendar(originEvent, applyType) {
 		  var event = {};
 
 		  event.id = originEvent.scheduleId;
@@ -322,15 +412,20 @@ $(document).ready(function() {
 		  event.start = moment(originEvent.startDt, dbFormat).format("YYYY-MM-DDTHH:mm");
 		  event.end = moment(originEvent.endDt, dbFormat).format("YYYY-MM-DDTHH:mm");
 
-		  $("#calendar").fullCalendar("renderEvent", event, true);
+		  if (applyType == "add") {
+			  $("#calendar").fullCalendar("renderEvent", event, true);
+		  }
+		  else {
+			  eventQueue.push(event);
+		  }
 	}
 
     $("#btnAddSchedule").on("click", function() {
     	changeView("add", {date: currentMoment});
     });
 
-    $(".btnApplyAddSchedule").on("click", function() {
-    	addSchedule();
+    $(".btnApplySchedule").on("click", function() {
+    	applySchedule();
     });
 
     $(".btnCancelAddSchedule").on("click", function() {
@@ -403,7 +498,7 @@ $(document).ready(function() {
 	    	}
 	    }).done(function(result) {
 	    	  for (var i=0;i<result.length;i++) {
-	    		  addScheduleToCalendar(result[i]);
+	    		  applyScheduleToCalendar(result[i], "add");
 	    	  }
 	    }).fail(function() {
 			alert("사용자가 폭주하여 잠시 후 사용해주세요.");
