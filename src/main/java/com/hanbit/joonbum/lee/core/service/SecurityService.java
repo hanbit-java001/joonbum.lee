@@ -28,7 +28,7 @@ public class SecurityService {
 		return encoder.matches(rawPassword, encryptedPassword);
 	}
 
-	public MemberVO getValidMemberId(String email, String password) {
+	public MemberVO getValidMember(String email, String password) {
 		MemberVO member = null;
 
 		try {
