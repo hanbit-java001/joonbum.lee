@@ -1,5 +1,8 @@
 package com.hanbit.joonbum.lee.core.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,22 +21,47 @@ public class MemberDAO {
 
 	public int countMember(String email) {
 
-		return 0;
+		return sqlSession.selectOne("member.countMember", email);
 	}
 
 	public int insertMember(MemberVO member) {
 
-		return 0;
+		return sqlSession.insert("member.insertMember", member);
+	}
+
+	public MemberVO selectMember(String email){
+		Map param = new HashMap();
+		param.put("email", email);
+
+		return sqlSession.selectOne("member.selectMember", param);
+	}
+
+	public MemberVO selectMember(int memberId){
+		Map param = new HashMap();
+		param.put("memberId", memberId);
+
+		return sqlSession.selectOne("member.selectMember", param);
+	}
+
+	public int selectMemberId(String email) {
+
+		return sqlSession.selectOne("member.selectMemberId", email);
 	}
 
 	public String selectPassword(int memberId) {
 
-		return null;
+		return sqlSession.selectOne("member.selectPassword", memberId);
 	}
 
 	public int updateMember(MemberVO member) {
 
-		return 0;
+		return sqlSession.update("member.updateMember", member);
 	}
+
+	public int selectNextMemberId() {
+
+		return sqlSession.selectOne("member.selectNextMemberId");
+	}
+
 
 }
