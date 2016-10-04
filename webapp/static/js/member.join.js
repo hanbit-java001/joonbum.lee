@@ -43,7 +43,7 @@ $(function() {
 			url:"/api/member/join",
 			method:"POST",
 			data:data,
-			contenType:false,
+			contentType:false,
 			processData:false
 		}).done(function(result) {
 			console.log(result);
